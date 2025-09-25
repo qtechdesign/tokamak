@@ -7,7 +7,7 @@ implemented here as immutable dataclasses with helpers for (de)serialisation.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Iterable, Tuple
+from typing import Any, Dict, Tuple
 
 
 @dataclass(frozen=True)
@@ -178,11 +178,19 @@ def presets() -> Dict[str, TokamakPitParams]:
         wall_thickness=1.5,
         sector_count=12,
         sector_joints_width=0.25,
-        cryostat_plinth_radius=9.5,
+        cryostat_plinth_radius=9.0,
         cryostat_plinth_height=2.0,
-        duct_rings=list(default.duct_rings),
-        ports=list(default.ports),
-        stairs=list(default.stairs),
+        duct_rings=(
+            DuctRing(radius=9.6, width=0.8, elevation=2.0, count=12, duct_width=0.6),
+            DuctRing(radius=11.6, width=0.8, elevation=5.0, count=24, duct_width=0.5),
+        ),
+        ports=(
+            Port(angle_deg=0.0, width=1.8, start_radius=7.5, end_radius=14.0),
+            Port(angle_deg=120.0, width=1.4, start_radius=7.8, end_radius=14.0),
+        ),
+        stairs=(
+            Stair(angle_deg=220.0, run_width=2.0, start_radius=8.0, end_radius=13.0),
+        ),
     )
     wide = TokamakPitParams(
         inner_radius=10.0,
@@ -192,11 +200,11 @@ def presets() -> Dict[str, TokamakPitParams]:
         wall_thickness=1.5,
         sector_count=18,
         sector_joints_width=0.25,
-        cryostat_plinth_radius=9.5,
+        cryostat_plinth_radius=12.0,
         cryostat_plinth_height=2.0,
-        duct_rings=list(default.duct_rings),
-        ports=list(default.ports),
-        stairs=list(default.stairs),
+        duct_rings=tuple(default.duct_rings),
+        ports=tuple(default.ports),
+        stairs=tuple(default.stairs),
     )
     deep = TokamakPitParams(
         inner_radius=8.0,
