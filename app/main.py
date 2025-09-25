@@ -12,9 +12,13 @@ if __package__ is None or __package__ == "":
     from pathlib import Path
 
     sys.path.append(str(Path(__file__).resolve().parent.parent))
-    from app.domain import TokamakPitParams, default_params, presets
+    from app.domain import TokamakPitParams, presets
+    from app.domain.validate import validate
+    from app.render.plan_preview import create_plan_figure
 else:
-    from .domain import TokamakPitParams, default_params, presets
+    from .domain import TokamakPitParams, presets
+    from .domain.validate import validate
+    from .render.plan_preview import create_plan_figure
 
 
 def load_preset_options() -> Dict[str, TokamakPitParams]:
@@ -61,9 +65,21 @@ def main() -> None:
     params = preset_options[selected_preset]
 
     params = render_controls(params)
+    validation_messages = validate(params)
 
-    st.subheader("Parameters JSON")
-    st.code(json.dumps(params.to_dict(), indent=2))
+    if validation_messages:
+        with st.expander("Validation issues", expanded=True):
+            for message in validation_messages:
+                st.error(message)
+
+    plan_tab, json_tab = st.tabs(["Plan Preview", "Parameters JSON"])
+
+    with plan_tab:
+        figure = create_plan_figure(params)
+        st.pyplot(figure, use_container_width=True)
+
+    with json_tab:
+        st.code(json.dumps(params.to_dict(), indent=2))
 
 
 if __name__ == "__main__":
