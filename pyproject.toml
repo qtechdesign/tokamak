@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokamak-pit-designer"
+version = "0.1.0"
+description = "Tokamak Pit Parametric Designer Streamlit app"
+requires-python = ">=3.9"
+authors = [
+    { name = "HZI Digital" }
+]
+dependencies = [
+    "streamlit>=1.36",
+    "numpy>=1.24",
+    "matplotlib>=3.8",
+]
+
+[tool.setuptools.packages.find]
+where = ["app"]
+
