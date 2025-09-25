@@ -26,6 +26,8 @@ PLINTH_FILL = "#a8dadc"
 def create_plan_figure(params: TokamakPitParams) -> plt.Figure:
     """Return a Matplotlib figure showing a plan of the Tokamak pit."""
 
+    max_dimension = max(params.outer_radius + params.wall_thickness, 1.0)
+
     figure, axes = plt.subplots(figsize=(6, 6))
     axes.set_aspect("equal", adjustable="box")
 
@@ -36,14 +38,12 @@ def create_plan_figure(params: TokamakPitParams) -> plt.Figure:
     _draw_stairs(axes, params)
     _draw_plinth(axes, params)
 
-    limit = params.outer_radius + params.wall_thickness * 1.2
+    limit = max_dimension + params.wall_thickness * 0.2
     axes.set_xlim(-limit, limit)
     axes.set_ylim(-limit, limit)
-    axes.set_xlabel("Meters")
-    axes.set_ylabel("Meters")
-    axes.set_title("Tokamak Pit Plan")
-    axes.grid(alpha=0.15)
+    axes.set_axis_off()
 
+    figure.tight_layout()
     return figure
 
 
@@ -147,4 +147,5 @@ def _draw_plinth(axes: Axes, params: TokamakPitParams) -> None:
         lw=1.5,
     )
     axes.add_patch(plinth)
+
 
